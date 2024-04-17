@@ -8,11 +8,16 @@ const card = function (data, i) {
 };
 
 const feed = async () => {
+  const requests = [];
   for (let i = 1; i < 152; i++) {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
-    const data = await res.json();
-    card(data, i);
+    requests.push(
+      fetch(`https://pokeapi.co/api/v2/pokemon/${i}`).then((res) => res.json())
+    );
   }
+  const responses = await Promise.all(requests);
+  responses.forEach((data, i) => {
+    card(data, i + 1);
+  });
 };
 
 feed();
